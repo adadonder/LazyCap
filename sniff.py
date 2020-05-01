@@ -65,6 +65,9 @@ def sniffer_main():
 
     interface = input(BLUE + "Which interface would you like to use? Leave blank for default.: ")
 
+    print(CYAN + "Sniffer started...")
+    print(CYAN + "Sniffing...")
+
     if interface == "":
         sniff_packets()
     else:
