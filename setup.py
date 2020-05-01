@@ -23,5 +23,5 @@ setup(
     author='Ada Donder',
     author_email='adadonderr@gmail.com',
     keywords="ARP, spoof, poison, gateway, packet, capture, mitm",
-    install_requires=['scapy']
+    install_requires=['scapy', 'colorama', 'services']
 )

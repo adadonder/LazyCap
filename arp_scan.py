@@ -1,4 +1,17 @@
+from colorama import init, Fore
 from scapy.layers.l2 import ARP, Ether, srp
+
+
+# Initialize colorama for pretty outputs with color!!
+init()
+init(autoreset=True)  # Every print statement will have it's own color. In other words it resets color after every print.
+
+# Define colors for colorama
+GREEN = Fore.GREEN
+RED = Fore.RED
+BLUE = Fore.BLUE
+CYAN = Fore.CYAN
+YELLOW = Fore.YELLOW
 
 
 def send_packets(packet):
@@ -26,8 +39,9 @@ def print_hosts(results):
         clients.append({"ip": received.psrc, "mac": received.hwsrc})
 
     # Print clients
-    print("Available clients in the network:")
-    print("IP" + " " * 18 + "MAC")  # Spaces are purely cosmetic
+    print(GREEN + "Scanning network. Please wait.")
+    print(GREEN + "\nAvailable clients in the network:")
+    print(GREEN + "IP" + " " * 18 + "MAC")  # Spaces are purely cosmetic
     for client in clients:
         print("{:16} {}".format(client["ip"], client["mac"]))
 
